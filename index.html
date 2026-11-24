@@ -1392,8 +1392,9 @@ function gate(id){
   d=await verify(k,true);
   if(!d.success){say('Something went wrong. Please try again.',1);busy=false;return;}
   ok=true;key=k; try{localStorage.setItem(G.sk,JSON.stringify({p:G.pid,k:k,t:Date.now()}));}catch(e){}
-  say('Unlocked! Let’s go, Agent! 🎉'); AE.sfx.star(3); setTimeout(()=>{showIntro(id);},900); busy=false; };
+  const can=id<=SAVE.unlocked; say(can?'Unlocked! Let’s go, Agent! 🎉':'Unlocked! 🎉 Finish Mission 1 to open Mission 2.'); AE.sfx.star(3); setTimeout(()=>{ if(can)showIntro(id); else showLevels(); },1100); busy=false; };
 }
+const _sv=showLevels; showLevels=function(){ _sv(); if(!ok){ const c=document.querySelector('#sLevels .cap'); if(c){ const b=document.createElement('button'); b.className='btn sm grn'; b.id='bKey'; b.textContent='🔑 I have a key'; b.style.margin='4px 0 0'; b.onclick=()=>gate(2); c.insertAdjacentElement('afterend',b); } } };
 const _si=showIntro; showIntro=function(id){ if(id>G.free&&!ok){gate(id);return;} return _si(id); };
 const _sl=startLevel; startLevel=function(id){ if(id>G.free&&!ok){gate(id);return;} return _sl(id); };
 // ---- watermark: DOM line on every screen + faint diagonal stamps in the game canvas ----
